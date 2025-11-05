@@ -16,9 +16,9 @@ GO
 CREATE TABLE bronze.crm_customers (
 	customer_id NVARCHAR(50), 
 	customer_unique_id NVARCHAR(50), 
-	customer_zip_code_prefix INT, 
+	customer_zip_code_prefix NVARCHAR(50), 
 	customer_city NVARCHAR(50), 
-	customer_state NVARCHAR(5)
+	customer_state NVARCHAR(50)
 );
 GO
   
@@ -27,11 +27,11 @@ IF OBJECT_ID ('bronze.crm_geolocation', 'U') IS NOT NULL
 GO
   
 CREATE TABLE bronze.crm_geolocation (
-	geolocation_zip_code_prefix INT,
-	geolocation_lat INT,
-	geolocation_lng INT,
+	geolocation_zip_code_prefix NVARCHAR(50),
+	geolocation_lat FLOAT,
+	geolocation_lng FLOAT,
 	geolocation_city NVARCHAR(50),
-	geolocation_state NVARCHAR(5)
+	geolocation_state NVARCHAR(50)
 );
 GO
   
@@ -40,13 +40,13 @@ IF OBJECT_ID ('bronze.crm_order_reviews', 'U') IS NOT NULL
 GO
   
 CREATE TABLE bronze.crm_order_reviews (
-	review_id NVARCHAR(50),
-	order_id NVARCHAR(50),
-	review_score INT,
-	review_comment_title NVARCHAR(50),
-	review_comment_message NVARCHAR(100),
-	review_creation_date DATETIME,
-	review_answer_timestamp DATETIME
+    review_id CHAR(32) NOT NULL,
+    order_id CHAR(32) NOT NULL,
+    review_score INT NULL,
+    review_comment_title VARCHAR(255) NULL,
+    review_comment_message VARCHAR(8000) NULL,
+    review_creation_date DATETIME NULL,
+    review_answer_timestamp DATETIME NULL
 );
 GO
 
@@ -127,8 +127,8 @@ GO
   
 CREATE TABLE bronze.erp_sellers (
 	seller_id NVARCHAR(50),
-	seller_zip_code_prefix INT,
+	seller_zip_code_prefix NVARCHAR(50),
 	seller_city NVARCHAR(50),
-	seller_state NVARCHAR(5)
+	seller_state NVARCHAR(50)
 );
 GO
