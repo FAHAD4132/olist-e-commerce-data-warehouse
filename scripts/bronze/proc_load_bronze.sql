@@ -13,14 +13,14 @@ Parameters:
 	  This stored procedure does not accept any parameters or return any values.
 
 Usage Example:
-    EXEC Bronze.load_Bronze;
+    EXEC Bronze.LoadBronze;
 ===============================================================================
 */
-CREATE OR ALTER PROCEDURE Bronze.load_Bronze AS
+CREATE OR ALTER PROCEDURE Bronze.LoadBronze AS
 BEGIN
-	DECLARE @Start_Time DATETIME, @End_Time DATETIME, @Batch_Start_Time DATETIME, @Batch_End_Time DATETIME; 
+	DECLARE StartTime DATETIME, EndTime DATETIME, @BatchStartTime DATETIME, @BatchEndTime DATETIME; 
 	BEGIN TRY
-		SET @Batch_Start_Time = GETDATE();
+		SET @BatchStartTime = GETDATE();
 		PRINT '================================================';
 		PRINT 'Loading Bronze Layer';
 		PRINT '================================================';
@@ -29,146 +29,151 @@ BEGIN
 		PRINT 'Loading CRM Tables';
 		PRINT '------------------------------------------------';
 
-		SET @Start_Time = GETDATE();
-		PRINT '>> Truncating Table: CRM_Fecom_Inc_Customer_List';
-		TRUNCATE TABLE Bronze.CRM_Fecom_Inc_Customer_List;
-		PRINT '>> Inserting Data Into: CRM_Fecom_Inc_Customer_List';
-		BULK INSERT Bronze.CRM_Fecom_Inc_Customer_List
-		FROM 'C:\Users\Dell\OneDrive\Desktop\Fecom Inc. (e-Com Marketplace Orders Data)\crm\Fecom Inc Customer List.csv'
+		SET StartTime = GETDATE();
+		PRINT '>> Truncating Table: crm_customers';
+		TRUNCATE TABLE Bronze.crm_customers;
+		PRINT '>> Inserting Data Into: crm_customers';
+		BULK INSERT Bronze.crm_customers
+		FROM 'C:\Users\Dell\OneDrive\Desktop\Grocery Sales\crm\customers.csv'
 		WITH (
 			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',
-			ROWTERMINATOR = '\n',
+			FIELDTERMINATOR = ',',
+			ROWTERMINATOR = '0x0a',
 			CODEPAGE = '65001',
-			FORMAT = 'CSV'
+			TABLOCK
 		);
-		SET @End_Time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @Start_Time, @End_Time) AS NVARCHAR) + ' seconds';
-		PRINT '>> -------------';
-
-		SET @Start_Time = GETDATE();
-		PRINT '>> Truncating Table: CRM_Fecom_Inc_Geolocations';
-		TRUNCATE TABLE Bronze.CRM_Fecom_Inc_Geolocations;
-		PRINT '>> Inserting Data Into: CRM_Fecom_Inc_Geolocations';
-		BULK INSERT Bronze.CRM_Fecom_Inc_Geolocations
-		FROM 'C:\Users\Dell\OneDrive\Desktop\Fecom Inc. (e-Com Marketplace Orders Data)\crm\Fecom Inc Geolocations.csv'
-		WITH (
-			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',
-			ROWTERMINATOR = '\n',
-			CODEPAGE = '65001',
-			FORMAT = 'CSV'
-		);
-		SET @End_Time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @Start_Time, @End_Time) AS NVARCHAR) + ' seconds';
-		PRINT '>> -------------';
-
-		SET @Start_Time = GETDATE();
-		PRINT '>> Truncating Table: CRM_Fecom_Inc_Order_Reviews';
-		TRUNCATE TABLE Bronze.CRM_Fecom_Inc_Order_Reviews;
-		PRINT '>> Inserting Data Into: CRM_Fecom_Inc_Order_Reviews';
-		BULK INSERT Bronze.CRM_Fecom_Inc_Order_Reviews
-		FROM 'C:\Users\Dell\OneDrive\Desktop\Fecom Inc. (e-Com Marketplace Orders Data)\crm\Fecom Inc Order Reviews.csv'
-		WITH (
-			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',
-			ROWTERMINATOR = '\n',
-			CODEPAGE = '65001',
-			FORMAT = 'CSV'
-		);
-		SET @End_Time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @Start_Time, @End_Time) AS NVARCHAR) + ' seconds';
+		SET EndTime = GETDATE();
+		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, StartTime, EndTime) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
 		PRINT '------------------------------------------------';
 		PRINT 'Loading ERP Tables';
 		PRINT '------------------------------------------------';
 
-		SET @Start_Time = GETDATE();
-		PRINT '>> Truncating Table: ERP_Fecom_Inc_Order_Items';
-		TRUNCATE TABLE Bronze.ERP_Fecom_Inc_Order_Items;
-		PRINT '>> Inserting Data Into: ERP_Fecom_Inc_Order_Items';
-		BULK INSERT Bronze.ERP_Fecom_Inc_Order_Items
-		FROM 'C:\Users\Dell\OneDrive\Desktop\Fecom Inc. (e-Com Marketplace Orders Data)\erp\Fecom Inc Order Items.csv'
+		SET StartTime = GETDATE();
+		PRINT '>> Truncating Table: erp_categories';
+		TRUNCATE TABLE Bronze.erp_categories;
+		PRINT '>> Inserting Data Into: erp_categories';
+		BULK INSERT Bronze.erp_categories
+		FROM 'C:\Users\Dell\OneDrive\Desktop\Grocery Sales\erp\categories.csv'
 		WITH (
 			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',
-			ROWTERMINATOR = '\n',
-			FORMAT = 'CSV'
+			FIELDTERMINATOR = ',',
+			ROWTERMINATOR = '0x0a',
+			TABLOCK
 		);
-		SET @End_Time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @Start_Time, @End_Time) AS NVARCHAR) + ' seconds';
+		SET EndTime = GETDATE();
+		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, StartTime, EndTime) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
-		SET @Start_Time = GETDATE();
-		PRINT '>> Truncating Table: ERP_Fecom_Inc_Order_Payments';
-		TRUNCATE TABLE Bronze.ERP_Fecom_Inc_Order_Payments;
-		PRINT '>> Inserting Data Into: ERP_Fecom_Inc_Order_Payments';
-		BULK INSERT Bronze.ERP_Fecom_Inc_Order_Payments
-		FROM 'C:\Users\Dell\OneDrive\Desktop\Fecom Inc. (e-Com Marketplace Orders Data)\erp\Fecom Inc Order Payments.csv'
+		SET StartTime = GETDATE();
+		PRINT '>> Truncating Table: erp_employees';
+		TRUNCATE TABLE Bronze.erp_employees;
+		PRINT '>> Inserting Data Into: erp_employees';
+		BULK INSERT Bronze.erp_employees
+		FROM 'C:\Users\Dell\OneDrive\Desktop\Grocery Sales\erp\employees.csv'
 		WITH (
 			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',
-			ROWTERMINATOR = '\n',
-			FORMAT = 'CSV'
+			FIELDTERMINATOR = ',',
+			ROWTERMINATOR = '0x0a',
+			CODEPAGE = '65001',
+			TABLOCK
 		);
-		SET @End_Time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @Start_Time, @End_Time) AS NVARCHAR) + ' seconds';
+		SET EndTime = GETDATE();
+		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, StartTime, EndTime) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
-		SET @Start_Time = GETDATE();
-		PRINT '>> Truncating Table: ERP_Fecom_Inc_Orders';
-		TRUNCATE TABLE Bronze.ERP_Fecom_Inc_Orders;
-		PRINT '>> Inserting Data Into: ERP_Fecom_Inc_Orders';
-		BULK INSERT Bronze.ERP_Fecom_Inc_Orders
-		FROM 'C:\Users\Dell\OneDrive\Desktop\Fecom Inc. (e-Com Marketplace Orders Data)\erp\Fecom Inc Orders.csv'
+		SET StartTime = GETDATE();
+		PRINT '>> Truncating Table: erp_products';
+		TRUNCATE TABLE Bronze.erp_products;
+		PRINT '>> Inserting Data Into: erp_products';
+		BULK INSERT Bronze.erp_products
+		FROM 'C:\Users\Dell\OneDrive\Desktop\Grocery Sales\erp\products.csv'
 		WITH (
 			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',
-			ROWTERMINATOR = '\n',
-			FORMAT = 'CSV'
-		);
-		SET @End_Time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @Start_Time, @End_Time) AS NVARCHAR) + ' seconds';
-		PRINT '>> -------------';
-
-		SET @Start_Time = GETDATE();
-		PRINT '>> Truncating Table: ERP_Fecom_Inc_Products';
-		TRUNCATE TABLE Bronze.ERP_Fecom_Inc_Products;
-		PRINT '>> Inserting Data Into: ERP_Fecom_Inc_Products';
-		BULK INSERT Bronze.ERP_Fecom_Inc_Products
-		FROM 'C:\Users\Dell\OneDrive\Desktop\Fecom Inc. (e-Com Marketplace Orders Data)\erp\Fecom Inc Products.csv'
-		WITH (
-			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',
-			ROWTERMINATOR = '\n',
-			FORMAT = 'CSV'
-		);
-		SET @End_Time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @Start_Time, @End_Time) AS NVARCHAR) + ' seconds';
-		PRINT '>> -------------';
-
-		SET @Start_Time = GETDATE();
-		PRINT '>> Truncating Table: ERP_Fecom_Inc_Sellers_List';
-		TRUNCATE TABLE Bronze.ERP_Fecom_Inc_Sellers_List;
-		PRINT '>> Inserting Data Into: ERP_Fecom_Inc_Sellers_List';
-		BULK INSERT Bronze.ERP_Fecom_Inc_Sellers_List
-		FROM 'C:\Users\Dell\OneDrive\Desktop\Fecom Inc. (e-Com Marketplace Orders Data)\erp\Fecom Inc Sellers List.csv'
-		WITH (
-			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',
-			ROWTERMINATOR = '\n',
+			FIELDTERMINATOR = ',',
+			ROWTERMINATOR = '0x0a',
 			CODEPAGE = '65001',
 			FORMAT = 'CSV'
 		);
-		SET @End_Time = GETDATE();
-		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, @Start_Time, @End_Time) AS NVARCHAR) + ' seconds';
+		SET EndTime = GETDATE();
+		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, StartTime, EndTime) AS NVARCHAR) + ' seconds';
 		PRINT '>> -------------';
 
-		SET @Batch_End_Time = GETDATE();
+		SET StartTime = GETDATE();
+		PRINT '>> Truncating Table: erp_sales';
+		TRUNCATE TABLE Bronze.erp_sales;
+		PRINT '>> Inserting Data Into: erp_sales';
+		BULK INSERT Bronze.erp_sales
+		FROM 'C:\Users\Dell\OneDrive\Desktop\Grocery Sales\erp\sales.csv'
+		WITH (
+			FIRSTROW = 2,
+			FIELDTERMINATOR = ',',
+			ROWTERMINATOR = '0x0a',
+			TABLOCK
+		);
+		SET EndTime = GETDATE();
+		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, StartTime, EndTime) AS NVARCHAR) + ' seconds';
+		PRINT '>> -------------';
+
+		PRINT '------------------------------------------------';
+		PRINT 'Loading MDM Tables';
+		PRINT '------------------------------------------------';
+
+		SET StartTime = GETDATE();
+		PRINT '>> Truncating Table: mdm_cities';
+		TRUNCATE TABLE Bronze.mdm_cities;
+		PRINT '>> Inserting Data Into: mdm_cities';
+		BULK INSERT Bronze.mdm_cities
+		FROM 'C:\Users\Dell\OneDrive\Desktop\Grocery Sales\mdm\cities.csv'
+		WITH (
+			FIRSTROW = 2,
+			FIELDTERMINATOR = ',',
+			ROWTERMINATOR = '0x0a',
+			CODEPAGE = '65001',
+			TABLOCK
+		);
+		SET EndTime = GETDATE();
+		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, StartTime, EndTime) AS NVARCHAR) + ' seconds';
+		PRINT '>> -------------';
+
+		SET StartTime = GETDATE();
+		PRINT '>> Truncating Table: mdm_countries';
+		TRUNCATE TABLE Bronze.mdm_countries;
+		PRINT '>> Inserting Data Into: mdm_countries';
+		BULK INSERT Bronze.mdm_countries
+		FROM 'C:\Users\Dell\OneDrive\Desktop\Grocery Sales\mdm\countries.csv'
+		WITH (
+			FIRSTROW = 2,
+			FIELDTERMINATOR = ',',
+			ROWTERMINATOR = '0x0a',
+			CODEPAGE = '65001',
+			TABLOCK
+		);
+		SET EndTime = GETDATE();
+		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, StartTime, EndTime) AS NVARCHAR) + ' seconds';
+		PRINT '>> -------------';
+
+		SET StartTime = GETDATE();
+		PRINT '>> Truncating Table: mdm_zipcodes';
+		TRUNCATE TABLE Bronze.mdm_zipcodes;
+		PRINT '>> Inserting Data Into: mdm_zipcodes';
+		BULK INSERT Bronze.mdm_zipcodes
+		FROM 'C:\Users\Dell\OneDrive\Desktop\Grocery Sales\mdm\zipcodes.csv'
+		WITH (
+			FIRSTROW = 2,
+			FIELDTERMINATOR = ',',
+			ROWTERMINATOR = '0x0a',
+			TABLOCK
+		);
+		SET EndTime = GETDATE();
+		PRINT '>> Load Duration: ' + CAST(DATEDIFF(second, StartTime, EndTime) AS NVARCHAR) + ' seconds';
+		PRINT '>> -------------';
+
+		SET @BatchEndTime = GETDATE();
 		PRINT '=========================================='
 		PRINT 'Loading Bronze Layer is Completed';
-        PRINT '   - Total Load Duration: ' + CAST(DATEDIFF(SECOND, @Batch_Start_Time, @Batch_End_Time) AS NVARCHAR) + ' seconds';
+        PRINT '   - Total Load Duration: ' + CAST(DATEDIFF(SECOND, @BatchStartTime, @BatchEndTime) AS NVARCHAR) + ' seconds';
 		PRINT '=========================================='
 	END TRY
 	BEGIN CATCH
