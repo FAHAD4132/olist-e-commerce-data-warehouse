@@ -9,120 +9,113 @@ Script Purpose:
 ===============================================================================
 */
 
-IF OBJECT_ID ('Bronze.CRM_Fecom_Inc_Customer_List', 'U') IS NOT NULL
-	DROP TABLE Bronze.CRM_Fecom_Inc_Customer_List;
+IF OBJECT_ID ('Bronze.crm_customers', 'U') IS NOT NULL
+	DROP TABLE Bronze.crm_customers;
 GO
   
-CREATE TABLE Bronze.CRM_Fecom_Inc_Customer_List (
-	Customer_Trx_ID		  NVARCHAR(50), 
-	Subscriber_ID		  NVARCHAR(50), 
-	Subscribe_Date 		  DATE, 
-	First_Order_Date 	  DATE, 
-	Customer_Postal_Code  NVARCHAR(20),
-	Customer_City		  NVARCHAR(50),
-	Customer_Country	  NVARCHAR(50),
-	Customer_Country_Code NVARCHAR(5),
-	Age					  INT,
-	Gender				  NVARCHAR(10)
+CREATE TABLE Bronze.crm_customers (
+	CustomerID	  INT,
+	FirstName	  VARCHAR(50),
+	MiddleInitial VARCHAR(5),
+	LastName	  VARCHAR(50),
+	CityID		  INT,
+	Addres		  VARCHAR(100)
 );
 GO
   
-IF OBJECT_ID ('Bronze.CRM_Fecom_Inc_Geolocations', 'U') IS NOT NULL
-	DROP TABLE Bronze.CRM_Fecom_Inc_Geolocations;
+IF OBJECT_ID ('Bronze.mdm_cities', 'U') IS NOT NULL
+	DROP TABLE Bronze.mdm_cities;
 GO
   
-CREATE TABLE Bronze.CRM_Fecom_Inc_Geolocations (
-	Geo_Postal_Code  NVARCHAR(20), 
-	Geo_Lat 		 NVARCHAR(50), 
-	Geo_Lon 		 NVARCHAR(50), 
-	Geolocation_City NVARCHAR(100), 
-	Geo_Country 	 NVARCHAR(100)
+CREATE TABLE Bronze.mdm_cities (
+	CityID	  INT,
+	CityName  VARCHAR(50),
+	Zipcode	  VARCHAR(10),
+	CountryID INT
 );
 GO
   
-IF OBJECT_ID ('Bronze.CRM_Fecom_Inc_Order_Reviews', 'U') IS NOT NULL
-	DROP TABLE Bronze.CRM_Fecom_Inc_Order_Reviews;
+IF OBJECT_ID ('Bronze.mdm_countries', 'U') IS NOT NULL
+	DROP TABLE Bronze.mdm_countries;
 GO
   
-CREATE TABLE Bronze.CRM_Fecom_Inc_Order_Reviews (
-	Review_ID				  NVARCHAR(50), 
-	Order_ID				  NVARCHAR(50), 
-	Review_Score 			  INT, 
-	Review_Comment_Title_En   NVARCHAR(250), 
-	Review_Comment_Message_En NVARCHAR(MAX),
-	Review_Creation_Date 	  DATETIME,
-	Review_Answer_Timestamp   DATETIME
+CREATE TABLE Bronze.mdm_countries (
+	CountryID   INT,
+	CountryName VARCHAR(50),
+	CountryCode VARCHAR(10)
 );
 GO
 
-IF OBJECT_ID ('Bronze.ERP_Fecom_Inc_Order_Items', 'U') IS NOT NULL
-	DROP TABLE Bronze.ERP_Fecom_Inc_Order_Items;
+IF OBJECT_ID ('Bronze.mdm_zipcodes', 'U') IS NOT NULL
+	DROP TABLE Bronze.mdm_zipcodes;
 GO
   
-CREATE TABLE Bronze.ERP_Fecom_Inc_Order_Items (
-	Order_ID 			NVARCHAR(50), 
-	Order_Item_ID 		INT, 
-	Product_ID 			NVARCHAR(50), 
-	Seller_ID 			NVARCHAR(50), 
-	Shipping_Limit_Date DATETIME,
-	Price 				DECIMAL(10,2),
-	Freight_Value 		DECIMAL(10,2)
+CREATE TABLE Bronze.mdm_zipcodes (
+	Zipcode   VARCHAR(10),
+	Latitude  DECIMAL(10,4),
+	Longitude DECIMAL(10,4),
+	City      VARCHAR(50),
+	States	  VARCHAR(50),
+	County	  VARCHAR(50)
 );
 GO
 
-IF OBJECT_ID ('Bronze.ERP_Fecom_Inc_Order_Payments', 'U') IS NOT NULL
-	DROP TABLE Bronze.ERP_Fecom_Inc_Order_Payments;
+IF OBJECT_ID ('Bronze.erp_categories', 'U') IS NOT NULL
+	DROP TABLE Bronze.erp_categories;
 GO
   
-CREATE TABLE Bronze.ERP_Fecom_Inc_Order_Payments (
-	Order_ID 			 NVARCHAR(50), 
-	Payment_Sequential 	 INT, 
-	Payment_Type 		 NVARCHAR(50), 
-	Payment_Installments INT, 
-	Payment_Value 		 DECIMAL(10,2)
+CREATE TABLE Bronze.erp_categories (
+	CategoryID   INT,
+	CategoryName VARCHAR(50)
 );
 GO
 
-IF OBJECT_ID ('Bronze.ERP_Fecom_Inc_Orders', 'U') IS NOT NULL
-	DROP TABLE Bronze.ERP_Fecom_Inc_Orders;
+IF OBJECT_ID ('Bronze.erp_employees', 'U') IS NOT NULL
+	DROP TABLE Bronze.erp_employees;
 GO
   
-CREATE TABLE Bronze.ERP_Fecom_Inc_Orders (
-	Order_ID					  NVARCHAR(50), 
-	Customer_Trx_ID				  NVARCHAR(50), 
-	Order_Status				  NVARCHAR(20), 
-	Order_Purchase_Timestamp	  DATETIME, 
-	Order_Approved_At 			  DATETIME,
-	Order_Delivered_Carrier_Date  DATETIME,
-	Order_Delivered_Customer_Date DATETIME,
-	Order_Estimated_Delivery_Date DATETIME
+CREATE TABLE Bronze.erp_employees (
+	EmployeeID	  INT,
+	FirstName	  VARCHAR(50),
+	MiddleInitial VARCHAR(5),
+	LastName	  VARCHAR(50),
+	BirthDate	  DATETIME,
+	Gender		  VARCHAR(5),
+	CityID		  INT,
+	HireDate	  DATETIME
 );
 GO
 
-IF OBJECT_ID ('Bronze.ERP_Fecom_Inc_Products', 'U') IS NOT NULL
-	DROP TABLE Bronze.ERP_Fecom_Inc_Products;
+IF OBJECT_ID ('Bronze.erp_products', 'U') IS NOT NULL
+	DROP TABLE Bronze.erp_products;
 GO
   
-CREATE TABLE Bronze.ERP_Fecom_Inc_Products (
-	Product_ID			  NVARCHAR(50), 
-	Product_Category_Name NVARCHAR(50), 
-	Product_Weight_Gr 	  INT, 
-	Product_Length_Cm	  INT, 
-	Product_Height_Cm	  INT,
-	Product_Width_Cm	  INT
+CREATE TABLE Bronze.erp_products (
+	ProductID	 INT,
+	ProductName	 VARCHAR(100),
+	Price		 DECIMAL(10,4),
+	CategoryID	 INT,
+	Class		 VARCHAR(15),
+	ModifyDate	 DATETIME2(3),
+	Resistant	 VARCHAR(20),
+	IsAllergic	 VARCHAR(20),
+	VitalityDays DECIMAL(10, 1)
 );
 GO
 
-IF OBJECT_ID ('Bronze.ERP_Fecom_Inc_Sellers_List', 'U') IS NOT NULL
-	DROP TABLE Bronze.ERP_Fecom_Inc_Sellers_List;
+IF OBJECT_ID ('Bronze.erp_sales', 'U') IS NOT NULL
+	DROP TABLE Bronze.erp_sales;
 GO
   
-CREATE TABLE Bronze.ERP_Fecom_Inc_Sellers_List (
-	Seller_ID		   NVARCHAR(50), 
-	Seller_Name 	   NVARCHAR(50), 
-	Seller_Postal_Code NVARCHAR(20), 
-	Seller_City		   NVARCHAR(50), 
-	Country_Code	   NVARCHAR(5),
-	Seller_Country	   NVARCHAR(50)
+CREATE TABLE Bronze.erp_sales (
+	SalesID			  INT,
+	SalesPersonID	  INT,
+	CustomerID		  INT,
+	ProductID		  INT,
+	Quantity		  INT,
+	Discount		  DECIMAL(10,2),
+	TotalPrice		  DECIMAL(10,2),
+	SalesDate		  DATETIME2(3),
+	TransactionNumber VARCHAR(30)
 );
 GO
